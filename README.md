@@ -1,25 +1,28 @@
+TravisCI Badge: ![alt text](https://travis-ci.org/HarithJ/Yummy-Recipes.svg?branch=development)
+
+coveralls badge: <a href='https://coveralls.io/github/HarithJ/Yummy-Recipes?branch=development'><img src='https://coveralls.io/repos/github/HarithJ/Yummy-Recipes/badge.svg?branch=development' alt='Coverage Status' /></a>
+
+
 # Yummy-Recipes
-Yummy recipes provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
-
-(Please NOTE: The website is not functional yet, it just prvides a User Interface)
-How to view the website:
-
-1.Go to this URL: https://harithj.github.io/Yummy-Recipes/designs/UI, where you will see the page for registration. 
-
-2. On top left corner there will be another link that, when clicked, will direct you to the login page. 
-
-3. After clicking the sign in button, the login page will direct you to the profile page where you, as the user, will be able to edit or delete a recipe.
 
 
-TravisCI Badge: https://travis-ci.org/HarithJ/Yummy-Recipes.svg?branch=master
+To view the webiste please visit (PLEASE NOTE: The link is not working perfectly as it should): https://yummy-recipes-harith.herokuapp.com/
 
+You can also clone the development branch and take the following steps to view the website (this shud happen inside command-line prompt:
 
-Coveralls badge: <a href='https://coveralls.io/github/HarithJ/Yummy-Recipes?branch=master'><img src='https://coveralls.io/repos/github/HarithJ/Yummy-Recipes/badge.svg?branch=master' alt='Coverage Status' /></a>
+1. Move in the Yummy-Recipes directory: 
 
+        cd Yummy-Recipes
+        
+2. Activate the virtualenv: 
 
-Code Climate badges:
+        source bin/activate
 
-  Maintability Badge: <a href="https://codeclimate.com/github/HarithJ/Yummy-Recipes/maintainability"><img   src="https://api.codeclimate.com/v1/badges/51294a9baa2c09e901e7/maintainability" /></a>
-  
-  Test Coverage Badge: <a href="https://codeclimate.com/github/HarithJ/Yummy-Recipes/test_coverage"><img src="https://api.codeclimate.com/v1/badges/51294a9baa2c09e901e7/test_coverage" /></a>
-  
+3. From here you can use two ways:
+        
+        Set the variable for flask: export FLASK_APP=webapp/app.py
+        Run flask: flask run
+    
+    OR JUST TYPE
+            
+        gunicorn -w 4 webapp.app:app

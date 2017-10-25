@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
     <!-- My CSS -->
-    <link rel="stylesheet" type="text/css" href="myCSS.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='myCSS.css') }}">
 
 
     <!-- link to google font -->
@@ -27,7 +27,7 @@
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Register</a>
+                    <a class="nav-link" href="/index.html">Register</a>
                 </li>
             </ul>
         </div>
@@ -38,24 +38,33 @@
                 <h1 class="text-center">Yummy Recipes</h1>
             </div>
             <div class="col-3 header-img1">
-                <img src="recipe.jpg" class="img-fluid img-thumbnail" style="transform: rotate(20deg);">
+                <img src="{{ url_for('static', filename='recipe.jpg') }}" class="img-fluid img-thumbnail" style="transform: rotate(20deg);">
             </div>
             <div class="col-3 align-self-center header-img2">
-                <img src="food.jpg" class="img-fluid img-thumbnail text-right">
+                <img src="{{ url_for('static', filename='food.jpg') }}" class="img-fluid img-thumbnail text-right">
             </div>
         </div>
 
     <div class="container-fluid mTop">
+        <!-- Flash msg to show that incorrect credentials -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="text-center text-danger">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <div class="row justify-content-center">
-            <form class="col-sm-6" action="https://harithj.github.io/Yummy-Recipes/designs/UI/profile.html?">
+            <form class="col-sm-6" action="/validate/" method="Post">
                 <h5 class="text-secondary">Sign in!!!</h5>
                 <div class="form-group">
-                    <label for="inputEmail">Email address</label>
-                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                    <label for="inputName">Name</label>
+                    <input type="text" class="form-control" id="inputName" aria-describedby="emailHelp" placeholder="Enter name" name="name">
                 </div>
                 <div class="form-group">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password">
                 </div>
                 <div class="row justify-content-end">
                     <div class="col-auto">
