@@ -113,5 +113,3 @@ def logout():
     current_user = None
     return redirect(url_for('login_page'))
 
-if __name__== '__main__':
-    app.run()
