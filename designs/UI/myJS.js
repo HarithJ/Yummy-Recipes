@@ -78,7 +78,7 @@ $( document ).ready(function() {
     $(".edit-category").on("click", function(){
         currentCategoryName = $(this).closest(".category").find(".category-name").text();
         console.log(currentCategoryName);
-        var formForEditng = `<form method="Post" action="/editcategory/${currentCategoryName}" name="addcategoryForm">
+        var formForEditng = `<br/><form method="Post" action="/editcategory/${currentCategoryName}" name="addcategoryForm">
             <input value="${currentCategoryName}" type="text" name="category_name"/>
             <button type="submit" class="btn btn-warning">Rename!</button>
         </form>`;
