@@ -6,6 +6,26 @@ SECRET_KEY = 'development mode'
 app = Flask(__name__, static_folder='../designs/UI', template_folder='../designs/UI')
 app.config.from_object(__name__)
 
+class Category:
+
+    def __init__(self, category_name):
+        self.category_name = category_name
+        self.recipes = {}
+
+    def add_recipe(self, title, ingredients, directions):
+        self.recipes[title] = Recipe(title, ingredients, directions)
+
+    def edit_recipe(self, prev_title, title, ingredients, directions):
+        self.recipes.pop(prev_title)
+        self.recipes[title] = Recipe(title, ingredients, directions)
+
+    def delete_recipe(self, recipe_title):
+        self.recipes.pop(recipe_title)
+
+    def edit_category(self, category_name):
+        self.category_name = category_name
+
+
 class Recipe:
     def __init__(self, title, ingredients, directions):
         self.title = title
@@ -18,22 +38,23 @@ class User:
         self.email = email
         self.password = password
         self.details = details
-        self.recipes = {}
+        self.categories = {"test":Category("test")}
 
     def is_valid(self, password):
         return self.password == password
 
-    def add_recipe(self, title, ingredients, directions):
-        self.recipes[title] = Recipe(title, ingredients, directions)
+    def add_category(self, category_name):
+        self.categories[category_name] = Category(category_name)
 
-    def edit_recipe(self, prev_title, title, ingredients, directions):
-        self.recipes[prev_title] = Recipe(title, ingredients, directions)
+    def delete_category(self, category_name):
+        self.categories.pop(category_name)
 
-    def delete_recipe(self, recipe_title):
-        self.recipes.pop(recipe_title)
+    def return_category(self, category_name):
+        return self.categories[category_name]
 
 users = {}
 current_user = None
+current_category = None
 
 @app.route('/')
 @app.route('/index.html/')
@@ -49,7 +70,9 @@ def profile(ingredients = None):
     global current_user
     if current_user == None:
         return redirect(url_for('login_page'))
-    return render_template("profile.html", recipes=current_user.recipes, user_name=current_user.name)
+
+    return redirect(url_for('categories'))
+    return render_template("profile.html", user_name=current_user.name)
 
 @app.route('/register/', methods=['POST'])
 def register():
@@ -76,8 +99,40 @@ def validate():
     flash("Incorrect Credentials Entered")
     return redirect(url_for('login_page'))
 
+@app.route('/categories.html/', methods=['GET'])
+def categories():
+    return render_template("categories.html", categories=current_user.categories, user_name=current_user.name)
+
+@app.route('/addcategory/', methods=['POST'])
+def add_category():
+    current_user.add_category(request.form['category_name'])
+    return redirect(url_for('categories'))
+
+@app.route('/editcategory')
+def edit_category_name():
+    category = current_user.return_category(request.args['category_name'])
+    category.edit_category(request.args['category_name'])
+    return redirect(url_for('categories'))
+
+
+@app.route('/deletecategory')
+def delete_category():
+    category = current_user.delete_category(request.args['category_name'])
+    return redirect(url_for('categories'))
+
+
+@app.route('/recipes', methods=['GET'])
+def recipes():
+    global current_category
+    if not current_category:
+        current_category = current_user.return_category(request.args['category_name'])
+    return render_template("profile.html", recipes=current_category.recipes, user_name=current_user.name)
+
+
 @app.route('/addrecipe/', methods=['POST'])
 def add_recipe():
+    global current_category
+
     ingredient = None
     ingredients = []
     ingredient_num = 1
@@ -86,11 +141,13 @@ def add_recipe():
         ingredients.append(ingredient)
         ingredient_num += 1
 
-    current_user.add_recipe(request.form['recipetitle'], ingredients, request.form['directions'])
-    return redirect(url_for('profile'))
+    current_category.add_recipe(request.form['recipetitle'], ingredients, request.form['directions'])
+    return redirect(url_for('recipes', category_name=current_category.category_name))
 
 @app.route('/editrecipe/<string:prev_title>', methods=['POST'])
 def edit_recipe(prev_title):
+    global current_category
+
     ingredient = None
     ingredients = []
     ingredient_num = 1
@@ -99,13 +156,13 @@ def edit_recipe(prev_title):
         ingredients.append(ingredient)
         ingredient_num += 1
 
-    current_user.edit_recipe(prev_title, request.form['recipetitle'], ingredients, request.form['directions'])
-    return redirect(url_for('profile'))
+    current_category.edit_recipe(prev_title, request.form['recipetitle'], ingredients, request.form['directions'])
+    return redirect(url_for('recipes', category_name=current_category.category_name))
 
 @app.route('/deleterecipe/<string:recipe_title>')
 def delete_recipe(recipe_title):
-    current_user.delete_recipe(recipe_title)
-    return redirect(url_for('profile'))
+    current_category.delete_recipe(recipe_title)
+    return redirect(url_for('recipes', category_name=current_category.category_name))
 
 @app.route('/logout/')
 def logout():
