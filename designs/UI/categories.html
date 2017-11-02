@@ -25,10 +25,11 @@
 
         <div class="collapse navbar-collapse justify-content-between align-items-center" id="navbarText">
             <span class="navebar-text header-text">
-              <h5>Yummy Recipes</h5>
+              <h2>Yummy Recipes</h2>
             </span>
+
             <span class="navbar-text text-primary">
-              <p class="text-right">Welcome {{ user_name }}</p>
+              <h6>Welcome {{ user_name }}</h6>
             </span>
             <a href="/logout/"><button type="button" class="btn btn-outline-danger">Sign Out</button></a>
         </div>
@@ -48,7 +49,7 @@
         <div class="row category">
 
           <div class="col-7">
-            <p><a href="{{ url_for('recipes', category_name=value.category_name) }}" class="category-name">{{ value.category_name }}</a></p>
+            <h4><a href="{{ url_for('recipes', category_name=value.category_name) }}" class="category-name">{{ value.category_name }}</a></h4>
           </div>
 
           <div class="col-1">
@@ -60,12 +61,10 @@
           </div>
 
         </div>
-
-    </div>
-
-
         {% endfor%}
     </div>
+
+
 
 
     <!-- Optional JavaScript -->
