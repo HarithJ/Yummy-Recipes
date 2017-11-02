@@ -50,6 +50,11 @@ class User:
     def delete_category(self, category_name):
         self.categories.pop(category_name)
 
+    def edit_category(self, prev_name, new_name):
+
+        self.categories[prev_name].edit_category(new_name)
+        self.categories[new_name] = self.categories.pop(prev_name)
+
     def return_category(self, category_name):
         return self.categories[category_name]
 
@@ -109,10 +114,9 @@ def add_category():
     current_user.add_category(request.form['category_name'])
     return redirect(url_for('categories'))
 
-@app.route('/editcategory')
-def edit_category_name():
-    category = current_user.return_category(request.args['category_name'])
-    category.edit_category(request.args['category_name'])
+@app.route('/editcategory/<string:prev_name>', methods=['POST'])
+def edit_category_name(prev_name):
+    current_user.edit_category(prev_name, request.form['category_name'])
     return redirect(url_for('categories'))
 
 

@@ -45,14 +45,14 @@
 
         {% for key, value in categories.items() %}
         </br>
-        <div class="row">
+        <div class="row category">
 
           <div class="col-7">
-            <p><a href="{{ url_for('recipes', category_name=value.category_name) }}">{{ value.category_name }}</a></p>
+            <p><a href="{{ url_for('recipes', category_name=value.category_name) }}" class="category-name">{{ value.category_name }}</a></p>
           </div>
 
           <div class="col-1">
-            <a href="{{ url_for('edit_category_name', category_name=value.category_name) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <a class="edit-category"><i class="fa fa-pencil" aria-hidden="true"></i></a>
           </div>
 
           <div class="col-1">
