@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, url_for, request, session, g, abort, flash
 
 #config
@@ -170,3 +171,6 @@ def logout():
     current_user = None
     return redirect(url_for('login_page'))
 
+if __name__ == '__main__':
+   port = int(os.environ.get('PORT', 5000))
+   app.run('', port=port)
