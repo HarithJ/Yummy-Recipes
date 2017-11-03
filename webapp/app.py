@@ -139,6 +139,7 @@ def validate():
             current_user = users[request.form['name']]
             return redirect(url_for('profile'))
 
+    #: if incorrect credentials entered then display a flash message to the use
     flash("Incorrect Credentials Entered")
     return redirect(url_for('login_page'))
 
@@ -148,6 +149,12 @@ def categories():
 
 @app.route('/addcategory/', methods=['POST'])
 def add_category():
+
+    #: check to see if the category name is not blank:
+    if request.form['category_name'] == "":
+        flash("Category name cannot be blank!")
+        return redirect(url_for('categories'))
+
     current_user.add_category(request.form['category_name'])
     return redirect(url_for('categories'))
 
@@ -166,8 +173,7 @@ def delete_category():
 @app.route('/recipes', methods=['GET'])
 def recipes():
     global current_category
-    if not current_category:
-        current_category = current_user.return_category(request.args['category_name'])
+    current_category = current_user.return_category(request.args['category_name'])
     return render_template("profile.html", recipes=current_category.recipes, user_name=current_user.name)
 
 
@@ -182,6 +188,11 @@ def add_recipe():
         ingredient = request.form['ingredient{}'.format(ingredient_num)]
         ingredients.append(ingredient)
         ingredient_num += 1
+
+    #: check if the recipe title is blank
+    if request.form['recipetitle'] == "":
+        flash("Recipe title cannot be blank!")
+        return redirect(url_for('recipes', category_name=current_category.category_name))
 
     current_category.add_recipe(request.form['recipetitle'], ingredients, request.form['directions'])
     return redirect(url_for('recipes', category_name=current_category.category_name))

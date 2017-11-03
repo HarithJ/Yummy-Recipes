@@ -36,6 +36,15 @@
     </nav>
 
     <div class="container-fluid mTop">
+      <!-- Flash msg to show that incorrect credentials -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="text-center text-danger">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <!-- form to enable users to add a category -->
         <br/>
         <form method="Post" action="/addcategory/" name="addcategoryForm">
