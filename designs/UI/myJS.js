@@ -36,7 +36,7 @@ $( document ).ready(function() {
     $(".recipe .edit").on("click", function(){
         resetRecipeForm();
         prev_title = $(this).closest(".recipe").find(".recipetitle").text();
-        console.log(prev_title);
+
         $("#add-recipe-modal-form").attr("action", "/editrecipe/"+prev_title);
 
         // Add the recipe's title to the forms title input element
@@ -77,11 +77,13 @@ $( document ).ready(function() {
 
     $(".edit-category").on("click", function(){
         currentCategoryName = $(this).closest(".category").find(".category-name").text();
-        console.log(currentCategoryName);
-        var formForEditng = `<br/><form method="Post" action="/editcategory/${currentCategoryName}" name="addcategoryForm">
+
+        var formForEditng = `<br/><div class="row justify-content-center category">
+        <form method="Post" action="/editcategory/${currentCategoryName}" name="addcategoryForm">
             <input value="${currentCategoryName}" type="text" name="category_name"/>
             <button type="submit" class="btn btn-warning">Rename!</button>
-        </form>`;
+        </form> </div>`;
+
         $(this).parent().parent().replaceWith(formForEditng);
     })
 });

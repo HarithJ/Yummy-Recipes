@@ -18,21 +18,30 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='myCSS.css') }}">
   </head>
   <body>
-    <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #e3f2fd;">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+      <span class="navebar-brand mb-0 h2 header-text" style="color: #eee8aa">
+        Yummy Recipes
+      </span>
 
-        <div class="collapse navbar-collapse justify-content-between align-items-center" id="navbarText">
-            <span class="navebar-text header-text">
-              <h2>Yummy Recipes</h2>
-            </span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#yummyrecipesNavbar" aria-controls="yummyrecipesNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <span class="navbar-text text-primary">
-              <h6>Welcome {{ user_name }}</h6>
-            </span>
-            <a href="/logout/"><button type="button" class="btn btn-outline-danger">Sign Out</button></a>
-        </div>
+      <div id="yummyrecipesNavbar" class="collapse navbar-collapse">
+
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/categories.html/">Categories</a>
+          </li>
+        </ul>
+
+        <span class="navbar-text mr-auto" style="color:#f0f8ff">
+          Welcome {{ user_name }}
+        </span>
+
+        <a href="/logout/"><button type="button" class="btn btn-outline-warning">Sign Out</button></a>
+
+      </div>
     </nav>
 
     <div class="container-fluid mTop">
@@ -47,15 +56,26 @@
 
         <!-- form to enable users to add a category -->
         <br/>
-        <form method="Post" action="/addcategory/" name="addcategoryForm">
-            <input type="text" name="category_name"/>
-            <button type="submit" class="btn btn-primary">Add Category</button>
-        </form>
+
+          <form method="Post" action="/addcategory/" name="addcategoryForm">
+
+            <div class="row justify-content-center">
+              <div class="col-4">
+                <input type="text" name="category_name" class="form-control"/>
+              </div>
+
+              <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Add Category</button>
+              </div>
+            </div>
+
+          </form>
 
 
         {% for key, value in categories.items() %}
         </br>
-        <div class="row category">
+
+        <div class="row justify-content-center category">
 
           <div class="col-7">
             <h4><a href="{{ url_for('recipes', category_name=value.category_name) }}" class="category-name">{{ value.category_name }}</a></h4>
@@ -70,6 +90,7 @@
           </div>
 
         </div>
+
         {% endfor%}
     </div>
 
