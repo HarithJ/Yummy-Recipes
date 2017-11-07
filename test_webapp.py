@@ -2,7 +2,7 @@ import os
 import unittest
 from urllib.parse import urlparse
 
-from webapp.app import *
+from app import *
 
 class appTestCase(unittest.TestCase):
     def setUp(self):
