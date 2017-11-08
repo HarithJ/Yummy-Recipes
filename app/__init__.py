@@ -7,11 +7,6 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
 
-    from . import views
-
-    return app
-
-'''
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
@@ -19,5 +14,6 @@ def create_app(config_name):
     app.register_blueprint(categories_blueprint)
 
     from .recipes import recipes as recipes_blueprint
-    app.register_blueprint(recipes_blueprint)'''
+    app.register_blueprint(recipes_blueprint)
 
+    return app
