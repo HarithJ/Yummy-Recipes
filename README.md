@@ -1,6 +1,6 @@
-TravisCI Badge: [![Build Status](https://travis-ci.org/HarithJ/Yummy-Recipes.svg?branch=master)](https://travis-ci.org/HarithJ/Yummy-Recipes)
+TravisCI Badge: [![Build Status](https://travis-ci.org/HarithJ/Yummy-Recipes.svg?branch=restructuring-ch2)](https://travis-ci.org/HarithJ/Yummy-Recipes)
 
-coveralls badge: <a href='https://coveralls.io/github/HarithJ/Yummy-Recipes'><img src='https://coveralls.io/repos/github/HarithJ/Yummy-Recipes/badge.svg' alt='Coverage Status' /></a>
+coveralls badge: [![Coverage Status](https://coveralls.io/repos/github/HarithJ/Yummy-Recipes?branch=restructuring-ch2/badge.svg)](https://coveralls.io/github/HarithJ/Yummy-Recipes)
 
 
 # Yummy-Recipes
