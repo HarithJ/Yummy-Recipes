@@ -1,9 +1,11 @@
 from flask import render_template, redirect, url_for, request, session, g, abort, flash
 
+from app import category_required
 from . import recipes
 from config import Config
 
 @recipes.route('/recipes', methods=['GET'])
+@category_required
 def recipes_page():
 
     Config.current_category = Config.current_user.return_category(request.args['category_name'])
@@ -11,6 +13,7 @@ def recipes_page():
 
 
 @recipes.route('/addrecipe/', methods=['POST'])
+@category_required
 def add_recipe():
 
 
@@ -31,6 +34,7 @@ def add_recipe():
     return redirect(url_for('recipes.recipes_page', category_name=Config.current_category.category_name))
 
 @recipes.route('/editrecipe/<string:prev_title>', methods=['POST'])
+@category_required
 def edit_recipe(prev_title):
 
 
@@ -46,6 +50,7 @@ def edit_recipe(prev_title):
     return redirect(url_for('recipes.recipes_page', category_name=Config.current_category.category_name))
 
 @recipes.route('/deleterecipe/<string:recipe_title>')
+@category_required
 def delete_recipe(recipe_title):
     Config.current_category.delete_recipe(recipe_title)
     return redirect(url_for('recipes.recipes_page', category_name=Config.current_category.category_name))

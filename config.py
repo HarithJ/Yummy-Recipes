@@ -2,6 +2,7 @@ class Config(object):
     """
     Common Configurations
     """
+    DEBUG = True
 
     """These are global variables that keep track of:
         1. registered users
@@ -16,7 +17,7 @@ class DevelopmentConfig(Config):
     """
     Developement configurations
     """
-    DEBUG=True
+
 
 class ProductionConfig(Config):
     """
@@ -24,7 +25,15 @@ class ProductionConfig(Config):
     """
     DEBUG = False
 
+class TestingConfig(Config):
+    """
+    Testing configurations
+    """
+
+    TESTING = True
+
 app_config = {
     'development': DevelopmentConfig,
-    'production': ProductionConfig
+    'production': ProductionConfig,
+    'testing': TestingConfig
 }

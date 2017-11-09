@@ -35,7 +35,7 @@ class Recipe:
         self.ingredients = ingredients
         self.directions = directions
 
-class User:
+class User():
     """This class will represent a user.
     It takes the user's name, his email, his password, and details as arguments.
     It also keeps track of categories of the user, so each user will have his/her own list of categories
@@ -70,4 +70,3 @@ class User:
 
     def return_category(self, category_name):
         return self.categories[category_name]
-
