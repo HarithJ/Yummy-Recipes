@@ -1,27 +1,25 @@
 from flask import render_template, redirect, url_for, request, session, g, abort, flash
 
-from app import category_required
+from app import category_required, validate_input
 from . import recipes
 from config import Config
 
 @recipes.route('/recipes', methods=['GET'])
 @category_required
 def recipes_page():
-
-    Config.current_category = Config.current_user.return_category(request.args['category_name'])
     return render_template("profile.html", recipes=Config.current_category.recipes, user_name=Config.current_user.name)
 
 
 @recipes.route('/addrecipe/', methods=['POST'])
 @category_required
 def add_recipe():
-
-
     ingredient = None
     ingredients = []
     ingredient_num = 1
     while 'ingredient{}'.format(ingredient_num) in request.form:
         ingredient = request.form['ingredient{}'.format(ingredient_num)]
+        if validate_input(ingredient):
+            break
         ingredients.append(ingredient)
         ingredient_num += 1
 

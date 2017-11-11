@@ -42,3 +42,9 @@ def edit_category_name(prev_name):
 def delete_category():
     category = Config.current_user.delete_category(request.args['category_name'])
     return redirect(url_for('categories.categories_page'))
+
+@categories.route('/set_current_category', methods=['GET'])
+@login_required
+def set_current_category():
+    Config.current_category = Config.current_user.return_category(request.args['category_name'])
+    return redirect(url_for('recipes.recipes_page', category_name=Config.current_category.category_name))

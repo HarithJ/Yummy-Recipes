@@ -45,7 +45,13 @@
         </div>
 
     <div class="container-fluid mTop">
-        {% if error %}<h6 class="text-danger text-center">{{ error }}</h6>{% endif %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="text-center text-danger">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
         <h5 class="text-primary">Register Now!</h5>
         <form action="/register/" method="Post" name="regForm" onsubmit="return validateForm()">
@@ -82,7 +88,7 @@
                     <textarea class="form-control" id="aboutYou" rows="3" name="details"></textarea>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button id="submitButton" type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 

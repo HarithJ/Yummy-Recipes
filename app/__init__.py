@@ -1,7 +1,12 @@
 from flask import Flask, flash, redirect, url_for
 from functools import wraps
+import re
 
 from config import Config, app_config
+
+def validate_input(input_str):
+    if re.match('^\s', input_str) or input_str == '':
+        return True
 
 def login_required(f):
     """
@@ -10,12 +15,12 @@ def login_required(f):
     with a flash msg.
     """
     @wraps(f)
-    def wrapper():
+    def wrapper(*args, **kwargs):
         if Config.current_user == None:
             flash("You must be logged in to access this page!!!")
             return redirect(url_for('auth.login_page'))
 
-        return f()
+        return f(*args, **kwargs)
     return wrapper
 
 def category_required(f):
@@ -26,12 +31,12 @@ def category_required(f):
     """
     @login_required
     @wraps(f)
-    def wrapper():
+    def wrapper(*args, **kwargs):
         if Config.current_category == None:
             flash("You must select a category first to view the recipes!!!")
             return redirect(url_for('categories.categories_page'))
 
-        return f()
+        return f(*args, **kwargs)
     return wrapper
 
 def create_app(config_name):
@@ -39,8 +44,6 @@ def create_app(config_name):
 
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
-
-
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)

@@ -3,12 +3,15 @@ from flask import render_template, redirect, url_for, request, session, g, abort
 from . import auth
 from ..models import User
 from config import Config
+from app import validate_input
 
 @auth.route('/')
 @auth.route('/index.html/')
 def index():
     """This function takes a user to index.html page (homepage) which diplays a registration form and a link to login page."""
+
     return render_template("index.html")
+
 
 @auth.route('/login.html/')
 def login_page():
@@ -20,10 +23,17 @@ def register():
     """This function is there to register a user"""
     error = None
 
+    #: check if the user inputed leading spaces
+    if validate_input(request.form['name']) or validate_input(request.form['email']):
+        error = 'Leading spaces inserted in name/email field!'
+
     # check if the password and ver password are not the same
     if request.form['password'] != request.form['verpassword']:
         error = 'Password does not match the password in verify password field'
-        return render_template('index.html', error=error)
+
+    if error:
+        flash(error)
+        return redirect(url_for('auth.index'))
 
     Config.users[request.form['name']] = User(request.form['name'], request.form['email'], request.form['password'], request.form['details'])
     return redirect(url_for('auth.login_page'))
