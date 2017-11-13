@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, url_for
 from functools import wraps
 import re
 
+
 from config import Config, app_config
 
 def validate_input(input_str):

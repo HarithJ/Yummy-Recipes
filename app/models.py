@@ -12,12 +12,12 @@ class Category:
         self.category_name = category_name
         self.recipes = {}
 
-    def add_recipe(self, title, ingredients, directions):
-        self.recipes[title] = Recipe(title, ingredients, directions)
+    def add_recipe(self, title, ingredients, directions, recipe_image):
+        self.recipes[title] = Recipe(title, ingredients, directions, recipe_image)
 
-    def edit_recipe(self, prev_title, title, ingredients, directions):
+    def edit_recipe(self, prev_title, title, ingredients, directions, recipe_image):
         self.recipes.pop(prev_title)
-        self.recipes[title] = Recipe(title, ingredients, directions)
+        self.recipes[title] = Recipe(title, ingredients, directions, recipe_image)
 
     def delete_recipe(self, recipe_title):
         self.recipes.pop(recipe_title)
@@ -30,10 +30,11 @@ class Recipe:
     """This is a class that will represent a recipe.
     It takes a title for the recipe, it's ingredients and directions as arguments.
     """
-    def __init__(self, title, ingredients, directions):
+    def __init__(self, title, ingredients, directions, image_name):
         self.title = title
         self.ingredients = ingredients
         self.directions = directions
+        self.image_name = image_name
 
 class User():
     """This class will represent a user.

@@ -3,6 +3,8 @@ class Config(object):
     Common Configurations
     """
     DEBUG = True
+    UPLOAD_FOLDER = 'designs/UI/uploads/'
+    ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
     """These are global variables that keep track of:
         1. registered users
