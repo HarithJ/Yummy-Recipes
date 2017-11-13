@@ -75,7 +75,7 @@
             </div>
 
             {% else %}
-              <img src="{{ url_for('static', filename='default.jpg') }}" class="img-fluid img-thumbnail" name="{{ value.image_name }}">
+              <img src="{{ url_for('static', filename='uploads/{}'.format(value.image_name)) }}" class="img-fluid img-thumbnail" name="{{ value.image_name }}">
             {% endif %}
           </div>
 
