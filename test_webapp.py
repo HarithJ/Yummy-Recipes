@@ -1,11 +1,11 @@
 import unittest
 
+from io import BytesIO
 from flask import url_for
 from flask_testing import TestCase
 
 from app import create_app
-from app.models import User
-from config import Config
+from app.models import User, Category, Globals
 
 class TestBase(TestCase):
 
@@ -21,14 +21,15 @@ class TestBase(TestCase):
         Will be called before every test
         """
         #: create a test user
-        Config.users['Harith'] = User('Harith', 'harithjaved@gmail.com', 'abc123', "I am a Tester")
+        Globals.users['Harith'] = User('Harith', 'harithjaved@gmail.com', 'abc123', "I am a Tester")
 
 
     def tearDown(self):
         """
         Will be called after every test
         """
-        Config.users = {}
+        Globals.current_user = None
+        Globals.users = {}
 
 class authentication(TestBase):
     """
@@ -72,7 +73,57 @@ class authentication(TestBase):
             details = 'testing'
             ), follow_redirects=True)
 
-        self.assertIn('regTest', Config.users)
+        self.assertIn('regTest', Globals.users)
+
+class TestFunctionality(TestBase):
+
+    def setUp(self):
+        """
+        Will be called before every test
+        """
+        #: create a test user
+        Globals.users['Harith'] = User('Harith', 'harithjaved@gmail.com', 'abc123', "I am a Tester")
+
+        Globals.current_user = Globals.users['Harith']
+
+    def test_add_category(self):
+        """
+        Test that a user can successfully add in a category
+        """
+        response = self.client.post(url_for('categories.add_category'), data=dict(
+            category_name = 'Yummy Recipes'
+            ), follow_redirects=True)
+
+        self.assertIn('Yummy Recipes', Globals.current_user.categories)
+
+    def test_add_recipe(self):
+        """
+        Test that a user can successfully add a recipe
+        """
+        response = self.client.post(url_for('categories.add_category'), data=dict(
+            category_name = 'Yummy Recipes'
+            ), follow_redirects=True)
+
+
+        Globals.current_category = Globals.current_user.return_category('Yummy Recipes')
+
+        response = self.client.post(url_for('recipes.add_recipe'), content_type='multipart/form-data', data=dict(
+            recipetitle = 'Ugali',
+            ingredient1 = 'Maize Flour',
+            ingredient2 = 'Water',
+            directions = 'Heat water, pour in maize flour, stir well.',
+            recipe_image = (BytesIO(b''), '')
+            ), follow_redirects=True)
+
+        recipe = Globals.current_category.recipes['Ugali']
+
+        self.assertIn('Ugali', Globals.current_category.recipes)
+
+        self.assertEqual('Ugali', recipe.title)
+        self.assertIn('Maize Flour', recipe.ingredients)
+        self.assertIn('Water', recipe.ingredients)
+        self.assertEqual('Heat water, pour in maize flour, stir well.', recipe.directions)
+        self.assertEqual('noImage', recipe.image_name)
 
 class TestViews(TestBase):
 
@@ -131,4 +182,4 @@ class TestViews(TestBase):
         self.assertRedirects(response, redirect_url)
 
 if __name__ == '__main__':
-    unitest.main()
+    unittest.main()

@@ -70,7 +70,6 @@ $( document ).ready(function() {
 
 
         ingredient.remove();
-        console.log(typeof(del_ing_num));
 
         while(update_ing_num < ing_num){
             let current_ing = $("#ingredients").find(`.ingredient${update_ing_num+1}`);
@@ -163,7 +162,7 @@ $( document ).ready(function() {
                 submit = true;
                $('.div-error').remove();
             }
-            console.log(checkInputField($(this).val()));
+
             if (checkInputField($(this).val()) == false){
                submit = false;
                $(this).parent().append(divError);

@@ -2,8 +2,8 @@ from flask import Flask, flash, redirect, url_for
 from functools import wraps
 import re
 
-
-from config import Config, app_config
+from config import app_config
+from .models import Globals
 
 def validate_input(input_str):
     if re.match('^\s', input_str) or input_str == '':
@@ -17,8 +17,8 @@ def login_required(f):
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if Config.current_user == None:
-            flash("You must be logged in to access this page!!!")
+        if Globals.current_user == None:
+            flash("You must be logged in to access this page. :)")
             return redirect(url_for('auth.login_page'))
 
         return f(*args, **kwargs)
@@ -26,15 +26,15 @@ def login_required(f):
 
 def category_required(f):
     """
-    First check if a user is logged in or not,
+    First, check if a user is logged in or not,
     if he is logged in, then check if he has selected a category or not,
     if he has not selected a category then redirect him to categories page.
     """
     @login_required
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if Config.current_category == None:
-            flash("You must select a category first to view the recipes!!!")
+        if Globals.current_category == None:
+            flash("You must select a category first to view the recipes ;)")
             return redirect(url_for('categories.categories_page'))
 
         return f(*args, **kwargs)
