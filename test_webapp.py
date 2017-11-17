@@ -125,6 +125,98 @@ class TestFunctionality(TestBase):
         self.assertEqual('Heat water, pour in maize flour, stir well.', recipe.directions)
         self.assertEqual('noImage', recipe.image_name)
 
+
+class TestCategories(TestBase):
+    def setUp(self):
+        """
+        Will be called before every test
+        """
+        #: create a test user
+        Globals.users['Harith'] = User('Harith', 'harithjaved@gmail.com', 'abc123', "I am a Tester")
+
+        #: login the user
+        Globals.current_user = Globals.users['Harith']
+
+        #: create Category
+        Globals.current_user.add_category('Yummy Recipes')
+
+    def test_edit_category(self):
+        """
+        Test that a user can edit a category
+        """
+        response = self.client.post(url_for('categories.edit_category_name', prev_name='Yummy Recipes'), data=dict(
+            category_name = 'Name Edited'
+            ))
+
+        self.assertIn('Name Edited', Globals.current_user.categories)
+        self.assertNotIn('Yummy Recipes', Globals.current_user.categories)
+
+    def test_delete_category(self):
+        """
+        Test that a user can delete a category
+        """
+        self.assertIn('Yummy Recipes', Globals.current_user.categories)
+
+        reponse = self.client.get(url_for('categories.delete_category', category_name='Yummy Recipes'))
+
+        self.assertNotIn('Yummy Recipes', Globals.current_user.categories)
+
+class TestRecipes(TestBase):
+    def setUp(self):
+        """
+        Will be called before every test
+        """
+        #: create a test user
+        Globals.users['Harith'] = User('Harith', 'harithjaved@gmail.com', 'abc123', "I am a Tester")
+
+        #: login the user
+        Globals.current_user = Globals.users['Harith']
+
+        #: create Category
+        Globals.current_user.add_category('Yummy Recipes')
+
+        #: set current category, where recipes will be created
+        Globals.current_category = Globals.current_user.return_category('Yummy Recipes')
+
+        #: create a default recipe
+        Globals.current_category.add_recipe('Ugali', ['Maize Flour', 'Water'], 'Heat water, pour in maize flour, stir well.', 'noImage')
+
+    def test_edit_recipe(self):
+        """
+        Test that a user can edit a recipe
+        """
+        response = self.client.post(url_for('recipes.edit_recipe', prev_title='Ugali'), data=dict(
+            recipetitle = 'Edited',
+            ingredient1 = 'Edited Ing1',
+            ingredient2 = 'Edited Ing2',
+            directions = 'Edited directions',
+            recipe_image = (BytesIO(b''), ''),
+            hidden_recipe_image = 'noImage'
+            ), follow_redirects=True)
+
+        recipe = Globals.current_category.recipes['Edited']
+
+
+        self.assertEqual('Edited', recipe.title)
+        self.assertIn('Edited Ing1', recipe.ingredients)
+        self.assertIn('Edited Ing2', recipe.ingredients)
+        self.assertEqual('Edited directions', recipe.directions)
+        self.assertEqual('noImage', recipe.image_name)
+
+        self.assertIn('Edited', Globals.current_category.recipes)
+        self.assertNotIn('Ugali', Globals.current_category.recipes)
+
+    def test_delete_recipe(self):
+        """
+        Test that a user can successfully delete a recipe
+        """
+        self.assertIn('Ugali', Globals.current_category.recipes)
+
+        response = self.client.get(url_for('recipes.delete_recipe', recipe_title='Ugali'), follow_redirects=True)
+
+        self.assertNotIn('Ugali', Globals.current_category.recipes)
+
+
 class TestViews(TestBase):
 
     def test_index_view(self):
