@@ -68,7 +68,15 @@
         <div class="row recipe">
 
           <div class="col-2">
-            <img src="{{ url_for('static', filename='fish.jpg') }}" class="img-fluid img-thumbnail">
+            {% if value.image_name == "noImage" %}
+            <div class="no-image">
+              <h5>No Image</h5>
+              <p>Click edit button to add one NOW!!</p>
+            </div>
+
+            {% else %}
+              <img src="{{ url_for('static', filename='uploads/{}'.format(value.image_name)) }}" class="img-fluid img-thumbnail" name="{{ value.image_name }}">
+            {% endif %}
           </div>
 
           <div class="col-10">
@@ -107,16 +115,16 @@
         </div>
         {% endfor%}
     </div>
-<div id="form-goes-in-here"></div>
+
     <!-- Modal to add recipe -->
     <div class="modal fade" id="add-recipe-modal" tabindex="-1" role="dialog" aria-labelledby="recipe" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
-            <form method="Post" name="addrecipeForm" id="add-recipe-modal-form">
+            <form method="Post" name="addrecipeForm" id="add-recipe-modal-form" enctype=multipart/form-data>
 
               <div class="modal-header">
-                <input type="text" class="form-control recipetitle" name="recipetitle" placeholder="Recipe Title">
+                <input type="text" class="form-control recipetitle validate" name="recipetitle" placeholder="Recipe Title">
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -124,18 +132,24 @@
               </div>
 
               <div class="modal-body">
+                <h4>Add an Image</h4>
+                <input class="hidden-control" type="hidden" name="hidden_recipe_image" />
+                <label class="custom-file">
+                  <input type="file" id="recipe-image" name="recipe_image">
+                </label>
 
                 <h4>Ingredients</h4>
                 <ul id="ingredients">
                   <li id="last-ingredient-list">
                     <input type="text" name="last-ingredient">
+
                   </li>
                 </ul>
 
                 <h4>Directions</h4>
                 <div class="row">
                   <div class="col-12">
-                    <textarea class="form-control directions" name="directions" rows="3"></textarea>
+                    <textarea class="form-control directions validate" name="directions" rows="5"></textarea>
                   </div>
                 </div>
 
@@ -151,6 +165,7 @@
       </div>
     </div>
     <!-- End modal-->
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS, then my JS -->
